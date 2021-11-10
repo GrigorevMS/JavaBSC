@@ -2,20 +2,9 @@ package ToDoList;
 
 public class Task {
 
-    private
-
-    int Id;    // the ID of task
-    boolean Status;    // true - done, false - not done
-    String Description;    // What should be done
-
-    private boolean CheckInput (String input) {
-        for(int i = 0; i < input.length(); i++) {
-            if(input.charAt(i) == '\n') {
-                return false;
-            }
-        }
-        return true;
-    }
+    private int Id;    // the ID of task
+    private boolean Status;    // true - done, false - not done
+    private String Description;    // What should be done
 
     // Конструктор по-умолчанию
     Task() {
@@ -28,72 +17,63 @@ public class Task {
     Task(String description_input) {
         Id = 1;
         Status = false;
-        if(CheckInput(description_input)) {
-            Description = description_input;
-        }
-        else{
-            Description = "";
-        }
+        Description = description_input;
+    }
+
+    // Конструктор копирования
+    Task(Task copy){
+        Id = copy.Id;
+        Status = copy.Status;
+        Description = copy.Description;
     }
 
     // Подготовка информации о задаче для вывода на консоль
     String Out() {
         String Out = "";
-        Out = Out + Integer.toString(Id) + ") ";
+        Out = Out + Id + ". ";
         if(this.Status){
-            Out += "[v] ";
+            Out += "[X] ";
         }
         else{
-            Out += "[x] ";
+            Out += "[ ] ";
         }
         Out += this.Description;
         return Out;
     }
 
     // Задать описание задачи
-    boolean SetDescription(String input) {
-        if(CheckInput(input)) {
-            this.Description = input;
-            return true;
-        }
-        return false;
+    void SetDescription(String input) {
+        Description = input;
     }
 
     // Задать статус выполнения задачи
-    boolean SetStatus(boolean input) {
-        this.Status = input;
-        return true;
+    void SetStatus(boolean input) {
+        Status = input;
     }
 
     // Задать ID задачи
-    boolean SetId(int id){
-        this.Id = id;
-        return true;
+    void SetId(int id){
+        Id = id;
     }
 
     // Получить описание задачи
     String GetDescription(){
-        return this.Description;
+        return Description;
     }
 
     // Получить статус задачи
     boolean GetStatus(){
-        return this.Status;
+        return Status;
     }
 
     // Получить ID задачи
     int GetId(){
-        return this.Id;
+        return Id;
     }
 
     // Изменение статуса задачи на противоположный
     void ChangeStatus() {
-        if(this.Status == false){
-            this.Status = true;
-        }
-        else{
-            this.Status = false;
-        }
+        Status = !Status;
     }
 
 }
