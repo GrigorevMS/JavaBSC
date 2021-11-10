@@ -20,13 +20,6 @@ public class Task {
         Description = description_input;
     }
 
-    // Конструктор копирования
-    Task(Task copy){
-        Id = copy.Id;
-        Status = copy.Status;
-        Description = copy.Description;
-    }
-
     // Подготовка информации о задаче для вывода на консоль
     String Out() {
         String Out = "";
