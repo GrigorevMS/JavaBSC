@@ -6,13 +6,6 @@ public class Task {
     private boolean Status;    // true - done, false - not done
     private String Description;    // What should be done
 
-    // Конструктор по-умолчанию
-    Task() {
-        Id = 1;
-        Status = false;
-        Description = "";
-    }
-
     // Конструктор преобразования типов
     Task(String description_input) {
         Id = 1;
@@ -44,24 +37,9 @@ public class Task {
         Status = input;
     }
 
-    // Задать ID задачи
-    void SetId(int id){
-        Id = id;
-    }
-
-    // Получить описание задачи
-    String GetDescription(){
-        return Description;
-    }
-
     // Получить статус задачи
     boolean GetStatus(){
         return Status;
-    }
-
-    // Получить ID задачи
-    int GetId(){
-        return Id;
     }
 
     // Изменение статуса задачи на противоположный

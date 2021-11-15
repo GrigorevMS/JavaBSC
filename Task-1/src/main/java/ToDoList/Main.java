@@ -34,19 +34,29 @@ public class Main {
             input_cmd = in.nextLine();
             cmd_list = SepInput(input_cmd);
 
-            if(any_task) {
-                switch (cmd_list[0]) {
-                    case "add":
-                        if (cmd_list[1].isEmpty()) {
-                            System.out.println("Описание задачи отсутствует");
-                        } else {
+            switch(cmd_list[0]) {
+                case "add":
+                    if(cmd_list[1].isEmpty()) {
+                        System.out.println("Описание задачи отсутствует");
+                    }
+                    else {
+                        if(any_task) {
                             todo.SetDescription(cmd_list[1]);
                             todo.SetStatus(false);
+                        } else {
+                            todo = new Task(cmd_list[1]);
+                            any_task = true;
                         }
-                        break;
-                    case "print":
+                    }
+                    break;
+                case "print":
+                    if(any_task) {
                         if (cmd_list[1].isEmpty()) {
-                            System.out.println(todo.Out());
+                            if (!todo.GetStatus()) {
+                                System.out.println(todo.Out());
+                            } else {
+                                System.out.println("Невыполненных задач нет");
+                            }
                         } else {
                             if (cmd_list[1].equals("all")) {
                                 System.out.println(todo.Out());
@@ -54,8 +64,12 @@ public class Main {
                                 System.out.println("Недопустимый аргумент для команды print");
                             }
                         }
-                        break;
-                    case "toggle":
+                    } else {
+                        System.out.println("В списке задач не хранится ни одной задачи!");
+                    }
+                    break;
+                case "toggle":
+                    if(any_task) {
                         try {
                             int id = Integer.parseInt(cmd_list[1]);
                             if (id == 1) {
@@ -66,37 +80,17 @@ public class Main {
                         } catch (NumberFormatException nfe) {
                             System.out.println("Отсутствует или неверно введен идентификатор задачи");
                         }
-                        break;
-                    case "quit":
-                        working = false;
-                        break;
-                    default:
-                        System.out.println("Пустая или неизвестная команда!");
-                        break;
-                }
-            }
-            else {
-                if(cmd_list[0].equals("add")) {
-                    if (cmd_list[1].isEmpty()) {
-                        System.out.println("Описание задачи отсутствует");
+                    } else {
+                        System.out.println("В списке задач не хранится ни одной задачи!");
                     }
-                    else {
-                        todo = new Task(cmd_list[1]);
-                        any_task = true;
-                    }
-                }
-                else if(cmd_list[0].equals("quit")) {
+                    break;
+                case "quit":
                     working = false;
-                }
-                else if(cmd_list[0].equals("print") || cmd_list[0].equals("toggle")) {
-                    System.out.println("В списке задач не хранится ни одной задачи!");
-                }
-                else {
+                    break;
+                default:
                     System.out.println("Пустая или неизвестная команда!");
-                }
+                    break;
             }
         }
-
     }
-
 }
