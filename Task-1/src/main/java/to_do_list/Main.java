@@ -1,7 +1,6 @@
-package ToDoList;
+package to_do_list;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -11,18 +10,21 @@ public class Main {
     // Возвращает: [0] - команда, [1] - аргумент
     private static String[] SepInput(String input) {
         String[] out = new String[] {"", "", ""};
-        String[] split_arr;
+        String[] splitArr;
         input = input.trim();
-        split_arr = input.split(" ", 2);
-        for(int i = 0; i < split_arr.length; i++) {
-            out[i] = split_arr[i].trim();
+        splitArr = input.split(" ", 2);
+        for (int i = 0; i < splitArr.length; i++) {
+            out[i] = splitArr[i].trim();
         }
-        if(out[0].equals("edit")) {
-            split_arr = out[1].split("", 2);
-            out[1] = split_arr[0].trim();
-            out[2] = split_arr[1].trim();
+        if (out[0].equals("edit")) {
+            if (!out[1].isEmpty()) {
+                splitArr = out[1].split(" ", 2);
+                for (int i = 0; i < splitArr.length; i++) {
+                    out[i + 1] = splitArr[i].trim();
+                }
+            }
         }
-        return (out);
+        return out;
     }
 
     private static void Print(String output) {
@@ -32,46 +34,45 @@ public class Main {
     public static void main( String[] args ) {
         boolean working = true;
 
-        ArrayList<Task> tasklist = new ArrayList<Task>();
+        ArrayList<Task> taskList = new ArrayList<>();
         Scanner in = new Scanner(System.in);
-        int id_counter = 0;
+        int idCounter = 0;
 
         Print("ToDo List");
 
-        while(working) {
-            String input_cmd;
-            String[] cmd_list = new String[2];
+        while (working) {
+            String inputCmd;
+            String[] cmdList;
 
             System.out.print("Input Your command: ");
-            input_cmd = in.nextLine();
-            cmd_list = SepInput(input_cmd);
+            inputCmd = in.nextLine();
+            cmdList = SepInput(inputCmd);
 
-            switch(cmd_list[0]) {
+            switch (cmdList[0]) {
                 case "add":
-                    if(cmd_list[1].isEmpty()) {
+                    if (cmdList[1].isEmpty()) {
                         Print("Описание задачи отсутствует");
                     }
                     else {
-                        tasklist.add(new Task(cmd_list[1], ++id_counter));
+                        taskList.add(new Task(cmdList[1], ++idCounter));
                     }
                     break;
                 case "print":
-                    if(!tasklist.isEmpty()) {
-                        if (cmd_list[1].isEmpty()) {
-                            long count = tasklist.stream()
-                                    .filter(t -> !t.GetStatus())
+                    if (!taskList.isEmpty()) {
+                        if (cmdList[1].isEmpty()) {
+                            long count = taskList.stream()
+                                    .filter(t -> !t.getStatus())
                                     .count();
                             if (count != 0) {
-                                tasklist.stream()
-                                        .filter(t -> !t.GetStatus())
-                                        .forEach(t -> Print(t.Out()));
+                                taskList.stream()
+                                        .filter(t -> !t.getStatus())
+                                        .forEach(t -> Print(t.out()));
                             } else {
                                 Print("Невыполненных задач нет");
                             }
                         } else {
-                            if (cmd_list[1].equals("all")) {
-                                tasklist.stream()
-                                        .forEach(t -> Print(t.Out()));
+                            if (cmdList[1].equals("all")) {
+                                taskList.forEach(t -> Print(t.out()));
                             } else {
                                 Print("Недопустимый аргумент для команды print");
                             }
@@ -81,24 +82,24 @@ public class Main {
                     }
                     break;
                 case "toggle":
-                    if(!tasklist.isEmpty()) {
+                    if (!taskList.isEmpty()) {
                         try {
-                            int id = Integer.parseInt(cmd_list[1]);
-                            if(id > 0 && id <= id_counter) {
-                                Optional<Task> task_temp = tasklist.stream()
-                                                                    .filter(t -> t.GetId() == id)
+                            int id = Integer.parseInt(cmdList[1]);
+                            if (id > 0 && id <= idCounter) {
+                                Optional<Task> taskTemp = taskList.stream()
+                                                                    .filter(t -> t.getId() == id)
                                                                     .findFirst();
-                                if(task_temp.isPresent()){
-                                    Task task = task_temp.get();
-                                    task.ChangeStatus();
-                                    tasklist.set(tasklist.indexOf(task), new Task(task));
+                                if (taskTemp.isPresent()){
+                                    Task task = taskTemp.get();
+                                    task.changeStatus();
+                                    taskList.set(taskList.indexOf(task), new Task(task));
                                 } else {
                                     Print("Задача с указанным идентификатором отсутствует в списке");
                                 }
                             } else {
                                 Print("Задача с указанным идентификатором отсутствует в списке");
                             }
-                        } catch(NumberFormatException nfe) {
+                        } catch (NumberFormatException nfe) {
                             Print("Отсутствует или неверно введен идентификатор задачи");
                         }
                     } else {
@@ -106,22 +107,22 @@ public class Main {
                     }
                     break;
                 case "delete":
-                    if(!tasklist.isEmpty()) {
+                    if (!taskList.isEmpty()) {
                         try {
-                            int id = Integer.parseInt(cmd_list[1]);
-                            if(id > 0 && id <= id_counter) {
-                                Optional<Task> task_temp = tasklist.stream()
-                                                                    .filter(t -> t.GetId() == id)
+                            int id = Integer.parseInt(cmdList[1]);
+                            if (id > 0 && id <= idCounter) {
+                                Optional<Task> taskTemp = taskList.stream()
+                                                                    .filter(t -> t.getId() == id)
                                                                     .findFirst();
-                                if(task_temp.isPresent()) {
-                                    tasklist.remove(tasklist.indexOf(task_temp.get()));
+                                if (taskTemp.isPresent()) {
+                                    taskList.remove(taskTemp.get());
                                 } else {
                                     Print("Задача с указанным идентификатором отсутствует в списке");
                                 }
                             } else {
                                 Print("Задача с указанным идентификатором отсутствует в списке");
                             }
-                        } catch(NumberFormatException nfe) {
+                        } catch (NumberFormatException nfe) {
                             Print("Отсутствует или неверно введен идентификатор задачи");
                         }
                     } else {
@@ -129,17 +130,21 @@ public class Main {
                     }
                     break;
                 case "edit":
-                    if(!tasklist.isEmpty()) {
+                    if (!taskList.isEmpty()) {
                         try {
-                            int id = Integer.parseInt(cmd_list[1]);
-                            if(id > 0 && id <= id_counter) {
-                                Optional<Task> task_temp = tasklist.stream()
-                                                                    .filter(t -> t.GetId() == id)
+                            int id = Integer.parseInt(cmdList[1]);
+                            if (id > 0 && id <= idCounter) {
+                                Optional<Task> taskTemp = taskList.stream()
+                                                                    .filter(t -> t.getId() == id)
                                                                     .findFirst();
-                                if(task_temp.isPresent()) {
-                                    Task task = task_temp.get();
-                                    task.SetDescription(cmd_list[2]);
-                                    tasklist.set(tasklist.indexOf(task), new Task(task));
+                                if (taskTemp.isPresent()) {
+                                    Task task = taskTemp.get();
+                                    if (!cmdList[2].isEmpty()) {
+                                        task.setDescription(cmdList[2]);
+                                        taskList.set(taskList.indexOf(task), new Task(task));
+                                    } else {
+                                        Print("Описание задачи отсутствует");
+                                    }
                                 } else {
                                     Print("Задача с указанным идентификатором отсутствует в списке");
                                 }
@@ -154,19 +159,19 @@ public class Main {
                     }
                     break;
                 case "search":
-                    if(!tasklist.isEmpty()) {
-                        if(cmd_list[1].isEmpty()) {
+                    if (!taskList.isEmpty()) {
+                        if (cmdList[1].isEmpty()) {
                             Print("Пустой поисковый запрос недопустим");
                         } else {
-                            long count = tasklist.stream()
-                                    .filter(t -> !t.GetStatus())
+                            long count = taskList.stream()
+                                    .filter(t -> !t.getStatus())
                                     .count();
                             if (count != 0) {
-                                String charline = cmd_list[1].trim();
-                                tasklist.stream()
-                                        .filter(t -> !t.GetStatus())
-                                        .filter(t -> t.GetDescription().contains(charline))
-                                        .forEach(t -> Print(t.Out()));
+                                String charLine = cmdList[1].trim();
+                                taskList.stream()
+                                        .filter(t -> !t.getStatus())
+                                        .filter(t -> t.getDescription().contains(charLine))
+                                        .forEach(t -> Print(t.out()));
                             } else {
                                 Print("Невыполненных задач нет");
                             }

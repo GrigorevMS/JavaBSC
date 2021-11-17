@@ -1,4 +1,4 @@
-package ToDoList;
+package to_do_list;
 
 public class Task {
 
@@ -19,41 +19,38 @@ public class Task {
     }
 
     // Подготовка информации о задаче для вывода на консоль
-    String Out() {
-        String Out = "";
-        Out = Out + Id + ". ";
-        if(this.Status){
-            Out += "[X] ";
+    String out() {
+        String out = "%d. [%c] %s";
+        if (Status) {
+            out = String.format(out, Id, 'X', Description);
+        } else {
+            out = String.format(out, Id, ' ', Description);
         }
-        else{
-            Out += "[ ] ";
-        }
-        Out += this.Description;
-        return Out;
+        return out;
     }
 
-    // Получит id
-    int GetId() {
+    // Получить id
+    int getId() {
         return Id;
     }
 
     // Задать описание задачи
-    void SetDescription(String input) {
+    void setDescription(String input) {
         Description = input;
     }
 
     // Получить описание задачи
-    String GetDescription() {
+    String getDescription() {
         return Description;
     }
 
     // Получить статус задачи
-    boolean GetStatus(){
+    boolean getStatus(){
         return Status;
     }
 
     // Изменение статуса задачи на противоположный
-    void ChangeStatus() {
+    void changeStatus() {
         Status = !Status;
     }
 
