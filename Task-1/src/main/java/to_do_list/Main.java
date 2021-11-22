@@ -93,7 +93,6 @@ public class Main {
                                 if (taskTemp.isPresent()){
                                     Task task = taskTemp.get();
                                     task.changeStatus();
-                                    taskList.set(taskList.indexOf(task), new Task(task));
                                 } else {
                                     Print("Задача с указанным идентификатором отсутствует в списке");
                                 }
@@ -142,7 +141,6 @@ public class Main {
                                     Task task = taskTemp.get();
                                     if (!cmdList[2].isEmpty()) {
                                         task.setDescription(cmdList[2]);
-                                        taskList.set(taskList.indexOf(task), new Task(task));
                                     } else {
                                         Print("Описание задачи отсутствует");
                                     }
