@@ -1,5 +1,8 @@
 package to_do_list;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Scanner;
@@ -31,11 +34,11 @@ public class Main {
         System.out.println(output);
     }
 
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws IOException {
         boolean working = true;
 
+        BufferedReader inBuffer = new BufferedReader(new InputStreamReader(System.in));
         ArrayList<Task> taskList = new ArrayList<>();
-        Scanner in = new Scanner(System.in);
         int idCounter = 0;
 
         Print("ToDo List");
@@ -45,7 +48,7 @@ public class Main {
             String[] cmdList;
 
             System.out.print("Input Your command: ");
-            inputCmd = in.nextLine();
+            inputCmd = inBuffer.readLine();
             cmdList = SepInput(inputCmd);
 
             switch (cmdList[0]) {
@@ -187,6 +190,11 @@ public class Main {
                     Print("Пустая или неизвестная команда!");
                     break;
             }
+        }
+        try {
+            inBuffer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
