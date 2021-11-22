@@ -2,56 +2,56 @@ package to_do_list;
 
 public class Task {
 
-    private int Id;    // the ID of task
-    private boolean Status;    // true - done, false - not done
-    private String Description;    // What should be done
+    private int id;    // the ID of task
+    private boolean status;    // true - done, false - not done
+    private String description;    // What should be done
 
     Task(String description_input, int id_input) {
-        Id = id_input;
-        Status = false;
-        Description = description_input;
+        id = id_input;
+        status = false;
+        description = description_input;
     }
 
     Task(Task temp) {
-        Id = temp.Id;
-        Description = temp.Description;
-        Status = temp.Status;
+        id = temp.id;
+        description = temp.description;
+        status = temp.status;
     }
 
     // Подготовка информации о задаче для вывода на консоль
     String out() {
         String out = "%d. [%c] %s";
-        if (Status) {
-            out = String.format(out, Id, 'X', Description);
+        if (status) {
+            out = String.format(out, id, 'X', description);
         } else {
-            out = String.format(out, Id, ' ', Description);
+            out = String.format(out, id, ' ', description);
         }
         return out;
     }
 
     // Получить id
     int getId() {
-        return Id;
+        return id;
     }
 
     // Задать описание задачи
     void setDescription(String input) {
-        Description = input;
+        description = input;
     }
 
     // Получить описание задачи
     String getDescription() {
-        return Description;
+        return description;
     }
 
     // Получить статус задачи
     boolean getStatus(){
-        return Status;
+        return status;
     }
 
     // Изменение статуса задачи на противоположный
     void changeStatus() {
-        Status = !Status;
+        status = !status;
     }
 
 }
