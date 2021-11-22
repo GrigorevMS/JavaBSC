@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -63,13 +63,11 @@ public class Main {
                 case "print":
                     if (!taskList.isEmpty()) {
                         if (cmdList[1].isEmpty()) {
-                            long count = taskList.stream()
+                            ArrayList<Task> tempTaskList = taskList.stream()
                                     .filter(t -> !t.getStatus())
-                                    .count();
-                            if (count != 0) {
-                                taskList.stream()
-                                        .filter(t -> !t.getStatus())
-                                        .forEach(t -> Print(t.out()));
+                                    .collect(Collectors.toCollection(ArrayList::new));
+                            if (tempTaskList.size() != 0) {
+                                tempTaskList.forEach(t -> Print(t.out()));
                             } else {
                                 Print("Невыполненных задач нет");
                             }
@@ -90,8 +88,8 @@ public class Main {
                             int id = Integer.parseInt(cmdList[1]);
                             if (id > 0 && id <= idCounter) {
                                 Optional<Task> taskTemp = taskList.stream()
-                                                                    .filter(t -> t.getId() == id)
-                                                                    .findFirst();
+                                        .filter(t -> t.getId() == id)
+                                        .findFirst();
                                 if (taskTemp.isPresent()){
                                     Task task = taskTemp.get();
                                     task.changeStatus();
@@ -115,8 +113,8 @@ public class Main {
                             int id = Integer.parseInt(cmdList[1]);
                             if (id > 0 && id <= idCounter) {
                                 Optional<Task> taskTemp = taskList.stream()
-                                                                    .filter(t -> t.getId() == id)
-                                                                    .findFirst();
+                                        .filter(t -> t.getId() == id)
+                                        .findFirst();
                                 if (taskTemp.isPresent()) {
                                     taskList.remove(taskTemp.get());
                                 } else {
@@ -166,15 +164,19 @@ public class Main {
                         if (cmdList[1].isEmpty()) {
                             Print("Пустой поисковый запрос недопустим");
                         } else {
-                            long count = taskList.stream()
-                                    .filter(t -> !t.getStatus())
-                                    .count();
-                            if (count != 0) {
+                            ArrayList<Task> tempTaskList = taskList.stream().filter(t -> !t.getStatus()).collect(Collectors.toCollection(ArrayList::new));
+                            if (tempTaskList.size() != 0) {
                                 String charLine = cmdList[1].trim();
-                                taskList.stream()
-                                        .filter(t -> !t.getStatus())
-                                        .filter(t -> t.getDescription().contains(charLine))
-                                        .forEach(t -> Print(t.out()));
+                                boolean ifAnyTask = false;
+                                for (Task tempTask : tempTaskList) {
+                                    if (tempTask.getDescription().contains(charLine)) {
+                                        ifAnyTask = true;
+                                        Print(tempTask.out());
+                                    }
+                                }
+                                if (!ifAnyTask) {
+                                    Print("Задачи не найдены");
+                                }
                             } else {
                                 Print("Невыполненных задач нет");
                             }
