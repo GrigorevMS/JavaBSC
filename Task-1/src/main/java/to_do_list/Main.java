@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -63,9 +64,9 @@ public class Main {
                 case "print":
                     if (!taskList.isEmpty()) {
                         if (cmdList[1].isEmpty()) {
-                            ArrayList<Task> tempTaskList = taskList.stream()
+                            List<Task> tempTaskList = taskList.stream()
                                     .filter(t -> !t.getStatus())
-                                    .collect(Collectors.toCollection(ArrayList::new));
+                                    .collect(Collectors.toList());
                             if (tempTaskList.size() != 0) {
                                 tempTaskList.forEach(t -> Print(t.out()));
                             } else {
@@ -162,7 +163,9 @@ public class Main {
                         if (cmdList[1].isEmpty()) {
                             Print("Пустой поисковый запрос недопустим");
                         } else {
-                            ArrayList<Task> tempTaskList = taskList.stream().filter(t -> !t.getStatus()).collect(Collectors.toCollection(ArrayList::new));
+                            List<Task> tempTaskList = taskList.stream()
+                                    .filter(t -> !t.getStatus())
+                                    .collect(Collectors.toList());
                             if (tempTaskList.size() != 0) {
                                 String charLine = cmdList[1].trim();
                                 boolean ifAnyTask = false;
