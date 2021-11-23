@@ -12,7 +12,7 @@ public class Main {
 
     // Разбиение пользовательского ввода на команду и ее аргумент.
     // Возвращает: [0] - команда, [1] - аргумент
-    private static String[] SepInput(String input) {
+    private static String[] sepInput(String input) {
         String[] out = new String[] {"", "", ""};
         String[] splitArr;
         input = input.trim();
@@ -31,7 +31,7 @@ public class Main {
         return out;
     }
 
-    private static void Print(String output) {
+    private static void print(String output) {
         System.out.println(output);
     }
 
@@ -42,7 +42,7 @@ public class Main {
         ArrayList<Task> taskList = new ArrayList<>();
         int idCounter = 0;
 
-        Print("ToDo List");
+        print("ToDo List");
 
         while (working) {
             String inputCmd;
@@ -50,12 +50,12 @@ public class Main {
 
             System.out.print("Input Your command: ");
             inputCmd = inBuffer.readLine();
-            cmdList = SepInput(inputCmd);
+            cmdList = sepInput(inputCmd);
 
             switch (cmdList[0]) {
                 case "add":
                     if (cmdList[1].isEmpty()) {
-                        Print("Описание задачи отсутствует");
+                        print("Описание задачи отсутствует");
                     }
                     else {
                         taskList.add(new Task(cmdList[1], ++idCounter));
@@ -68,19 +68,19 @@ public class Main {
                                     .filter(t -> !t.getStatus())
                                     .collect(Collectors.toList());
                             if (tempTaskList.size() != 0) {
-                                tempTaskList.forEach(t -> Print(t.out()));
+                                tempTaskList.forEach(t -> print(t.out()));
                             } else {
-                                Print("Невыполненных задач нет");
+                                print("Невыполненных задач нет");
                             }
                         } else {
                             if (cmdList[1].equals("all")) {
-                                taskList.forEach(t -> Print(t.out()));
+                                taskList.forEach(t -> print(t.out()));
                             } else {
-                                Print("Недопустимый аргумент для команды print");
+                                print("Недопустимый аргумент для команды print");
                             }
                         }
                     } else {
-                        Print("В списке задач не хранится ни одной задачи!");
+                        print("В списке задач не хранится ни одной задачи!");
                     }
                     break;
                 case "toggle":
@@ -95,16 +95,16 @@ public class Main {
                                     Task task = taskTemp.get();
                                     task.changeStatus();
                                 } else {
-                                    Print("Задача с указанным идентификатором отсутствует в списке");
+                                    print("Задача с указанным идентификатором отсутствует в списке");
                                 }
                             } else {
-                                Print("Задача с указанным идентификатором отсутствует в списке");
+                                print("Задача с указанным идентификатором отсутствует в списке");
                             }
                         } catch (NumberFormatException nfe) {
-                            Print("Отсутствует или неверно введен идентификатор задачи");
+                            print("Отсутствует или неверно введен идентификатор задачи");
                         }
                     } else {
-                        Print("В списке задач не хранится ни одной задачи!");
+                        print("В списке задач не хранится ни одной задачи!");
                     }
                     break;
                 case "delete":
@@ -118,16 +118,16 @@ public class Main {
                                 if (taskTemp.isPresent()) {
                                     taskList.remove(taskTemp.get());
                                 } else {
-                                    Print("Задача с указанным идентификатором отсутствует в списке");
+                                    print("Задача с указанным идентификатором отсутствует в списке");
                                 }
                             } else {
-                                Print("Задача с указанным идентификатором отсутствует в списке");
+                                print("Задача с указанным идентификатором отсутствует в списке");
                             }
                         } catch (NumberFormatException nfe) {
-                            Print("Отсутствует или неверно введен идентификатор задачи");
+                            print("Отсутствует или неверно введен идентификатор задачи");
                         }
                     } else {
-                        Print("В списке задач не хранится ни одной задачи!");
+                        print("В списке задач не хранится ни одной задачи!");
                     }
                     break;
                 case "edit":
@@ -143,54 +143,52 @@ public class Main {
                                     if (!cmdList[2].isEmpty()) {
                                         task.setDescription(cmdList[2]);
                                     } else {
-                                        Print("Описание задачи отсутствует");
+                                        print("Описание задачи отсутствует");
                                     }
                                 } else {
-                                    Print("Задача с указанным идентификатором отсутствует в списке");
+                                    print("Задача с указанным идентификатором отсутствует в списке");
                                 }
                             } else {
-                                Print("Задача с указанным идентификатором отсутствует в списке");
+                                print("Задача с указанным идентификатором отсутствует в списке");
                             }
                         } catch (NumberFormatException nfe) {
-                            Print("Отсутствует или неверно введен идентификатор задачи");
+                            print("Отсутствует или неверно введен идентификатор задачи");
                         }
                     } else {
-                        Print("В списке задач не хранится ни одной задачи!");
+                        print("В списке задач не хранится ни одной задачи!");
                     }
                     break;
                 case "search":
                     if (!taskList.isEmpty()) {
                         if (cmdList[1].isEmpty()) {
-                            Print("Пустой поисковый запрос недопустим");
+                            print("Пустой поисковый запрос недопустим");
                         } else {
                             List<Task> tempTaskList = taskList.stream()
                                     .filter(t -> !t.getStatus())
                                     .collect(Collectors.toList());
                             if (tempTaskList.size() != 0) {
                                 String charLine = cmdList[1].trim();
-                                boolean ifAnyTask = false;
-                                for (Task tempTask : tempTaskList) {
-                                    if (tempTask.getDescription().contains(charLine)) {
-                                        ifAnyTask = true;
-                                        Print(tempTask.out());
-                                    }
-                                }
-                                if (!ifAnyTask) {
-                                    Print("Задачи не найдены");
+                                tempTaskList = tempTaskList.stream()
+                                        .filter(t -> t.getDescription().contains(charLine))
+                                        .collect(Collectors.toList());
+                                if (tempTaskList.size() != 0) {
+                                    tempTaskList.forEach(t -> print(t.out()));
+                                } else {
+                                    print("Задачи не найдены");
                                 }
                             } else {
-                                Print("Невыполненных задач нет");
+                                print("Невыполненных задач нет");
                             }
                         }
                     } else {
-                        Print("В списке задач не хранится ни одной задачи!");
+                        print("В списке задач не хранится ни одной задачи!");
                     }
                     break;
                 case "quit":
                     working = false;
                     break;
                 default:
-                    Print("Пустая или неизвестная команда!");
+                    print("Пустая или неизвестная команда!");
                     break;
             }
         }
